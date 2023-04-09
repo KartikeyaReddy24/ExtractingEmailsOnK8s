@@ -10,8 +10,8 @@ def process_sqs_message():
     while True:
         access_key_decoded, secret_key_decoded = decode_kubernetes_secrets(None, None)
 
-        client = boto3.resource('sqs',aws_access_key_id=ACCESS_KEY_SQS,
-                                aws_secret_access_key=SECRET_KEY_SQS,region_name=REGION_NAME_SQS)
+        client = boto3.resource('sqs',aws_access_key_id=access_key_decoded,
+                                aws_secret_access_key=secret_key_decoded,region_name=REGION_NAME_SQS)
         url = SQS_URL + str(SQS_QUEUE_NAME)
         receipt = client.Queue(url=url).receive_messages(MaxNumberOfMessages=1)
         req_session=requests.session()
