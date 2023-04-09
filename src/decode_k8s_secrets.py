@@ -1,7 +1,7 @@
 from kubernetes import client, config
 import base64
 
-def decode_kubernetes_secrets(access_key_decoded, secret_key_decoded):
+def decode_kubernetes_secrets(access_key_decoded, secret_key_decoded, postgres_user_decoded, postgres_password_decoded, postgres_db_name_decoded):
     # Load the Kubernetes configuration
     config.load_kube_config()
 
@@ -19,4 +19,13 @@ def decode_kubernetes_secrets(access_key_decoded, secret_key_decoded):
     access_key_decoded = base64.b64decode(secret.data['access-key-id']).decode('utf-8')
     secret_key_decoded = base64.b64decode(secret.data['secret-access-key']).decode('utf-8')
 
-    return access_key_decoded, secret_key_decoded
+    secret_name = 'postgresdb-credentials'
+    namespace = 'default'
+
+    # Decode the base64-encoded access key and secret key values
+    postgres_user_decoded = base64.b64decode(secret.data['postgres-user']).decode('utf-8')
+    postgres_password_decoded = base64.b64decode(secret.data['postgres-password']).decode('utf-8')
+    postgres_db_name_decoded = base64.b64decode(secret.data['postgres-dbname']).decode('utf-8')
+
+
+    return access_key_decoded, secret_key_decoded, postgres_user_decoded, postgres_password_decoded, postgres_db_name_decoded  

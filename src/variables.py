@@ -6,7 +6,7 @@ SQS_QUEUE_NAME= 'MyQueue'
 REGION_NAME_SQS = 'us-east-1'
 
 # Maximum Search Resulsts Per Serach Using
-MAX_RESULTS_PER_SEARCH=1
+MAX_RESULTS_PER_SEARCH= 1
 
 # Delay Time After Making Every Search
 DELAY_TIME_AFTER_EVERY_SEARCH = 18
