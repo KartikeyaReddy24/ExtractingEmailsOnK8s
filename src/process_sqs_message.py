@@ -4,7 +4,7 @@ from import_utils import time, random, os, datetime, uuid, List, Tuple, \
 from variables import *
 
 from search_and_extract_emails import search_and_extract_emails
-from deecode_k8s_secrets import decode_kubernetes_secrets
+from decode_k8s_secrets import decode_kubernetes_secrets
 
 def process_sqs_message():
     while True:
