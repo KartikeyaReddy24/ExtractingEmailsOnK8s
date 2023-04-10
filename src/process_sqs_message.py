@@ -8,7 +8,7 @@ from decode_k8s_secrets import decode_kubernetes_secrets
 
 def process_sqs_message():
     while True:
-        access_key_decoded, secret_key_decoded, postgres_user_decoded, postgres_password_decoded, postgres_db_name_decoded = decode_kubernetes_secrets(None, None, None, None, None)
+        access_key_decoded, secret_key_decoded = decode_kubernetes_secrets(None, None)
 
         client = boto3.resource('sqs',aws_access_key_id=access_key_decoded,
                                 aws_secret_access_key=secret_key_decoded,region_name=REGION_NAME_SQS)
