@@ -18,7 +18,7 @@ def process_data_to_database(re_match, website_links):
 
     # Define the SQL query to insert the data
     insert_query = "INSERT INTO emails (email_address, source_url, created_at) VALUES (%s, %s, %s)"
-
+    print("insert query",insert_query)
     # Define the list of email and url tuples to insert
     email_url_list = [(re_match, website_links)]
 
