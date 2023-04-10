@@ -35,6 +35,7 @@ def process_data_to_database(re_match, website_links):
 
         # Commit the changes
         conn.commit()
+        print("Data Now Saved to Database")
         
     except psycopg2.Error as e:
         # Handle any exceptions that occurred during the execution of the above code
