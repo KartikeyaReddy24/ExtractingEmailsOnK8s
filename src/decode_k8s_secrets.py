@@ -22,6 +22,9 @@ def decode_kubernetes_secrets(access_key_decoded, secret_key_decoded, postgres_u
     secret_name = 'postgresdb-credentials'
     namespace = 'default'
 
+    # Read the contents of the secret
+    secret = api_client.read_namespaced_secret(secret_name, namespace)
+
     # Decode the base64-encoded access key and secret key values
     postgres_user_decoded = base64.b64decode(secret.data['postgres-user']).decode('utf-8')
     postgres_password_decoded = base64.b64decode(secret.data['postgres-password']).decode('utf-8')
