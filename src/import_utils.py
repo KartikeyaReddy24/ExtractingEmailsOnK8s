@@ -14,3 +14,4 @@ from tld import get_tld
 import re
 from kubernetes import client, config
 import base64
+import psycopg2

@@ -1,5 +1,3 @@
-import psycopg2
-from datetime import datetime
 from decode_k8s_secrets import decode_kubernetes_secrets
 from search_and_extract_emails import *
 from import_utils import *
