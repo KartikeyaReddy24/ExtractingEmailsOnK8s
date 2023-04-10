@@ -17,9 +17,8 @@ def process_data_to_database(re_match, website_links):
 
     # Define the SQL query to insert the data
     insert_query = "INSERT INTO emails (email_address, source_url, created_at) VALUES (%s, %s, %s)"
-    print("insert query",insert_query)
     # Define the list of email and url tuples to insert
-    email_url_list = [(re_match, website_links)]
+    email_url_set = set([(re_match, website_links)])
 
     try:
         # Connect to the database and create a cursor object
@@ -27,12 +26,11 @@ def process_data_to_database(re_match, website_links):
         cur = conn.cursor()
 
         # Iterate through the email addresses and source URLs and insert them into the table
-        for email, url in email_url_list:
+        for email, url in email_url_set:
             cur.execute(insert_query, (email, url, datetime.now()))
 
         # Commit the changes
         conn.commit()
-        print("Data Now Saved to Database")
         
     except psycopg2.Error as e:
         # Handle any exceptions that occurred during the execution of the above code

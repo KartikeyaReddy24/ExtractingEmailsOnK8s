@@ -20,9 +20,6 @@ def search_and_extract_emails(search_value):
             r=requests.get(website_links, headers=headers)
             for re_match in re.findall(EMAIL_REGEX, r.text):
                 print(f'\n\t',re_match)
-                print(" wirting to databsae **")
                 process_data_to_database(re_match, website_links)
-        except Exception as e:
-            print(" exception at 26 **",e)
-            print("\n\tNot Found: ", website_links)
-    
+        except:
+             print("\n\tNot Found: ", website_links)
