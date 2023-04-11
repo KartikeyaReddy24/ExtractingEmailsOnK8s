@@ -6,9 +6,9 @@ RUN apt-get install -y python3
 
 RUN apt-get install -y git
 
-RUN git clone https://github.com/KartikeyaReddy24/ExtractingEmails.git
+RUN git clone https://github.com/KartikeyaReddy24/ExtractingEmailsOnK8s.git
 
-WORKDIR /ExtractingEmails
+WORKDIR /ExtractingEmailsOnK8s
 
 RUN apt-get install -y python3-pip
 
@@ -20,4 +20,6 @@ RUN python3 -m pip install googlesearch-python
 
 RUN python3 -m pip install xlsxwriter
 
-CMD [ "python3", "ExtractEmails_v2.6.py" ]
+RUN cd /src
+
+CMD [ "python3", "main.py" ]

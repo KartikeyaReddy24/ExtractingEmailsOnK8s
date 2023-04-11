@@ -2,7 +2,7 @@
 SQS_URL='https://sqs.us-east-1.amazonaws.com/492094906798/'
 SQS_QUEUE_NAME= 'MyQueue'
 
-# SQS Credentials
+# SQS Region Name
 REGION_NAME_SQS = 'us-east-1'
 
 # Maximum Search Resulsts Per Serach Using

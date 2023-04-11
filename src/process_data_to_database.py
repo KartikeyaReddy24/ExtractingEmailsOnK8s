@@ -5,14 +5,14 @@ from import_utils import *
 
 def process_data_to_database(re_match, website_links):
 
-    _,_,postgres_user_decoded, postgres_password_decoded = decode_kubernetes_secrets()
+    # _,_,postgres_user_decoded, postgres_password_decoded = decode_kubernetes_secrets()
 
     # Define the database connection parameters
     db_params = {
         'host': 'extracting-emails-database.cglvu9svk8cj.us-east-1.rds.amazonaws.com',
         'port': 5432,
-        'user': postgres_user_decoded,
-        'password': postgres_password_decoded 
+        'user': os.environ.get('POSTGRES_USER'),
+        'password': os.environ.get('POSTGRES_PASSWORD') 
     }
 
     # Define the SQL query to insert the data
