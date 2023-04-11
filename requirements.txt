@@ -19,7 +19,6 @@ docopt==0.6.2
 et-xmlfile==1.1.0
 exceptiongroup==1.1.0
 executing==1.2.0
-fastapi==0.89.1
 fire==0.5.0
 google-api-core==2.8.2
 google-api-python-client==2.51.0
@@ -101,7 +100,5 @@ urllib3==1.26.9
 uvicorn==0.20.0
 wcwidth==0.2.6
 websocket-client==1.5.1
-wikipedia==1.4.0
 wrapt==1.14.1
-XlsxWriter==3.0.3
 yarg==0.1.9

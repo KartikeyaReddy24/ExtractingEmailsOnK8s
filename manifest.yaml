@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: v2-extracting-emails-demo-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: extracting-emails
+  template:
+    metadata:
+      labels:
+        app: extracting-emails
+    spec:
+      containers:
+        - name: extracting-emails-container
+          image: kartikeya24/eek8s
+          ports:
+            - containerPort: 80
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credentials
+                  key: access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: aws-credentials
+                  key: secret-access-key
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: postgresdb-credentials
+                  key: postgres-user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgresdb-credentials
+                  key: postgres-password

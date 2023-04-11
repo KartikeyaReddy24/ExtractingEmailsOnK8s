@@ -8,18 +8,16 @@ RUN apt-get install -y git
 
 RUN git clone https://github.com/KartikeyaReddy24/ExtractingEmailsOnK8s.git
 
-WORKDIR /ExtractingEmailsOnK8s
+WORKDIR ExtractingEmailsOnK8s
 
 RUN apt-get install -y python3-pip
 
 RUN pip install --upgrade pip
 
-RUN python3 -m pip install -r requirements.txt
-
 RUN python3 -m pip install googlesearch-python
 
-RUN python3 -m pip install xlsxwriter
+RUN pip install psycopg2-binary
 
-RUN cd /src
+RUN python3 -m pip install -r requirements.txt
 
-CMD [ "python3", "main.py" ]
+CMD [ "python3", "/ExtractingEmailsOnK8s/src/main.py" ]
