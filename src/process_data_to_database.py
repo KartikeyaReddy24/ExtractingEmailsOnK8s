@@ -9,14 +9,16 @@ def process_data_to_database(re_match, website_links):
 
     # Define the database connection parameters
     db_params = {
-        'host': 'extracting-emails-database.cglvu9svk8cj.us-east-1.rds.amazonaws.com',
-        'port': 5432,
-        'user': os.environ.get('POSTGRES_USER'),
-        'password': os.environ.get('POSTGRES_PASSWORD') 
+        "host": "extracting-emails-database.cglvu9svk8cj.us-east-1.rds.amazonaws.com",
+        "port": 5432,
+        "user": os.environ.get("POSTGRES_USER"),
+        "password": os.environ.get("POSTGRES_PASSWORD"),
     }
 
     # Define the SQL query to insert the data
-    insert_query = "INSERT INTO emails (email_address, source_url, created_at) VALUES (%s, %s, %s)"
+    insert_query = (
+        "INSERT INTO emails (email_address, source_url, created_at) VALUES (%s, %s, %s)"
+    )
     # Define the list of email and url tuples to insert
     email_url_set = set([(re_match, website_links)])
 
@@ -31,13 +33,12 @@ def process_data_to_database(re_match, website_links):
 
         # Commit the changes
         conn.commit()
-        
+
     except psycopg2.Error as e:
         # Handle any exceptions that occurred during the execution of the above code
-        print(f'Error {e.pgcode}: {e.pgerror}')
-        
+        print(f"Error {e.pgcode}: {e.pgerror}")
+
     finally:
         # Close the cursor and connection
         cur.close()
         conn.close()
-
