@@ -1,7 +1,8 @@
 from decode_k8s_secrets import decode_kubernetes_secrets
 from search_and_extract_emails import *
 from import_utils import *
-
+from more_itertools import chunked
+from variables import *
 
 def process_data_to_database(re_match, website_links):
 
@@ -9,27 +10,38 @@ def process_data_to_database(re_match, website_links):
 
     # Define the database connection parameters
     db_params = {
-        "host": "extracting-emails-database.cglvu9svk8cj.us-east-1.rds.amazonaws.com",
-        "port": 5432,
+        "host": DB_HOST,
+        "port": DB_PORT,
         "user": os.environ.get("POSTGRES_USER"),
         "password": os.environ.get("POSTGRES_PASSWORD"),
-    }
+     }
 
     # Define the SQL query to insert the data
-    insert_query = (
-        "INSERT INTO emails (email_address, source_url, created_at) VALUES (%s, %s, %s)"
-    )
+    insert_query = INSERT_QUERY
+
     # Define the list of email and url tuples to insert
-    email_url_set = set([(re_match, website_links)])
+    email_url_set = set([(email, url) for email in re_match for url in website_links])
 
     try:
-        # Connect to the database and create a cursor object
-        conn = psycopg2.connect(**db_params)
+        # Create a connection pool and get a connection from the pool
+        conn_pool = psycopg2.pool.SimpleConnectionPool(
+            1, 20, **db_params)
+        conn = conn_pool.getconn()
+
+        # Create a cursor object from the connection
         cur = conn.cursor()
 
-        # Iterate through the email addresses and source URLs and insert them into the table
-        for email, url in email_url_set:
-            cur.execute(insert_query, (email, url, datetime.now()))
+        # Use a prepared statement for the insert query
+        cur = conn.cursor()
+        cur.execute("PREPARE insert_statement AS " + insert_query)
+
+        # Use batching to process data in smaller chunks
+        EMAIL_URL_BATCHES= chunked(email_url_set, BATCH_SIZE)
+        for batch in EMAIL_URL_BATCHES:
+            # Convert the batch to a list of tuples to pass as parameters to the prepared statement
+            batch_values = [(email, url, datetime.now()) for email, url in batch]
+            args_str = ','.join(cur.mogrify('(%s, %s, %s)', row).decode('utf8') for row in batch_values)
+            cur.execute("EXECUTE insert_statement (%s)" % args_str)
 
         # Commit the changes
         conn.commit()
@@ -41,4 +53,4 @@ def process_data_to_database(re_match, website_links):
     finally:
         # Close the cursor and connection
         cur.close()
-        conn.close()
+        conn_pool.putconn(conn)

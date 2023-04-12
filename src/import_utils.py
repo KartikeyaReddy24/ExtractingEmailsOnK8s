@@ -12,3 +12,4 @@ import re
 from kubernetes import client, config
 import base64
 import psycopg2
+import psycopg2.pool

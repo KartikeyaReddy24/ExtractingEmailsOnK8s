@@ -18,8 +18,18 @@ MAX_WEBSEARCHES = 2
 WAIT_TIME_AFTER_REACHIGN_MAX_WEBSEARCHES = 20
 
 # Extracting Emails
-EMAIL_REGEX = r"-*([\w\-\.]{1,100}@(?!example.com)(?!wixpress.com)(?!email.com)(?!sentry-viewer.wixpress.com)(?!2x.gif)(?!sentry.o2dev.net)(?!2x.png.com)(?!sentry.wixpress.com)(?!sentry-next.wixpress.com)(?!sentry.io)(?!16.14.0.com)(?!aphixsoftware.com)(?:\w[\w\-]+\.)+(?!jpg)(?!png)(?!js)(?!gif)[\w]+)-*"
+EMAIL_REGEX = r"-*([\w\-\.]{1,100}@(?!example.com)(?!wixpress.com)(?!email.com)(?!sentry-viewer.wixpress.com)(?!2x.gif)(?!sentry.o2dev.net)(?!2x.png.com)(?!sentry.wixpress.com)(?!sentry-next.wixpress.com)(?!sentry.io)(?!16.14.0.com)(?!16.14.0)(?!ingest.sentry.io)(?!aphixsoftware.com)(?:\w[\w\-]+\.)+(?!jpg)(?!png)(?!js)(?!gif)[\w]+)-*"
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 6.2; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/75.0.3770.100 Safari/537.36"
 }
+
+# Database
+DB_HOST= "extracting-emails-database.cglvu9svk8cj.us-east-1.rds.amazonaws.com",
+DB_PORT= 5432
+INSERT_QUERY= (
+        "INSERT INTO emails (email_address, source_url, created_at) VALUES %s"
+    )
+
+# Database Batch Size
+BATCH_SIZE = 1000
