@@ -32,4 +32,4 @@ INSERT_QUERY= (
     )
 
 # Database Batch Size
-BATCH_SIZE = 1000
+BATCH_SIZE = 4
