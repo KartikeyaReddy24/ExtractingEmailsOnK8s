@@ -5,7 +5,7 @@ from more_itertools import chunked
 from variables import *
 from datetime import datetime, timezone, timedelta
 
-def process_data_to_database(re_match, website_links):
+def process_data_to_database(email_ids, website_links):
 
     # _,_,postgres_user_decoded, postgres_password_decoded = decode_kubernetes_secrets()
 
@@ -19,14 +19,9 @@ def process_data_to_database(re_match, website_links):
 
     # Define the SQL query to insert the data
     insert_query = INSERT_QUERY
-
-    # Remove duplicates from re_match and website_links
-    email_set = set(re_match)
-    url_set = set(website_links)
-
     # Define the list of email and url tuples to insert
-    email_url_set = set([(email, url) for email in email_set for url in url_set])
-
+    email_urls = list(zip(email_ids,website_links))
+    email_set=set()
     try:
         # Create a connection pool and get a connection from the pool
         conn_pool = psycopg2.pool.SimpleConnectionPool(
@@ -37,14 +32,18 @@ def process_data_to_database(re_match, website_links):
         cur = conn.cursor()
 
         # Use batching to process data in smaller chunks
-        EMAIL_URL_BATCHES= chunked(email_url_set, BATCH_SIZE)
+        EMAIL_URL_BATCHES= chunked(email_urls, BATCH_SIZE)
         for batch in EMAIL_URL_BATCHES:
             # Convert the batch to a list of tuples to pass as parameters to the prepared statement
             EST_OFFSET = timedelta(hours=-5)
-            batch_values = [(email, url, datetime.now(timezone.utc).astimezone(timezone(EST_OFFSET))) for email, url in batch]
+            batch_values=[]
+            for email,url in batch:
+                if email in email_set:
+                    continue
+                email_set.add(email)
+                batch_values.append((email, url, datetime.now(timezone.utc).astimezone(timezone(EST_OFFSET))))
             args_str = ','.join(cur.mogrify('(%s, %s, %s)', row).decode('utf8') for row in batch_values)
             cur.execute(insert_query % args_str)
-
         # Commit the changes
         conn.commit()
 
