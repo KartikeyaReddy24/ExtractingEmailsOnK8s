@@ -3,7 +3,6 @@ from search_and_extract_emails import *
 from import_utils import *
 from more_itertools import chunked
 from variables import *
-from datetime import datetime, timezone, timedelta
 
 def process_data_to_database(email_ids, website_links):
 
@@ -31,13 +30,12 @@ def process_data_to_database(email_ids, website_links):
         cur = conn.cursor()
 
         # Use batching to process data in smaller chunks
-        EMAIL_URL_BATCHES= chunked(email_urls, BATCH_SIZE)
-        EST_OFFSET = timedelta(hours=-5)
         batch_values=[]
+        EMAIL_URL_BATCHES= chunked(email_urls, BATCH_SIZE)
         batch_values.append((EMAIL_URL_BATCHES, datetime.now(timezone.utc).astimezone(timezone(EST_OFFSET))))
         args_str = ','.join(cur.mogrify('(%s, %s, %s)', row).decode('utf8') for row in batch_values)
         cur.execute(insert_query % args_str)
-        
+
         # Commit the changes
         conn.commit()
 

@@ -1,3 +1,6 @@
+from import_utils import *
+
+
 # SQS URL and Queue Name
 SQS_URL = "https://sqs.us-east-1.amazonaws.com/492094906798/"
 SQS_QUEUE_NAME = "MyQueue"
@@ -28,8 +31,11 @@ headers = {
 DB_HOST= "extracting-emails-database.cglvu9svk8cj.us-east-1.rds.amazonaws.com",
 DB_PORT= 5432
 INSERT_QUERY= (
-        "INSERT INTO email_urls (email, url, timestamp) VALUES %s ON CONFLICT DO NOTHING"
+        "INSERT INTO batch_values (email, url, timestamp) VALUES %s ON CONFLICT DO NOTHING"
     )
 
 # Database Batch Size
 BATCH_SIZE = 4
+
+# Database Timezone
+EST_OFFSET = timedelta(hours=-5)
