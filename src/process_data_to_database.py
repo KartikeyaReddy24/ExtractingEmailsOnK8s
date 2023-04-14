@@ -21,7 +21,6 @@ def process_data_to_database(email_ids, website_links):
     insert_query = INSERT_QUERY
     # Define the list of email and url tuples to insert
     email_urls = list(zip(email_ids,website_links))
-    email_set=set()
     try:
         # Create a connection pool and get a connection from the pool
         conn_pool = psycopg2.pool.SimpleConnectionPool(
@@ -33,17 +32,12 @@ def process_data_to_database(email_ids, website_links):
 
         # Use batching to process data in smaller chunks
         EMAIL_URL_BATCHES= chunked(email_urls, BATCH_SIZE)
-        for batch in EMAIL_URL_BATCHES:
-            # Convert the batch to a list of tuples to pass as parameters to the prepared statement
-            EST_OFFSET = timedelta(hours=-5)
-            batch_values=[]
-            for email,url in batch:
-                if email in email_set:
-                    continue
-                email_set.add(email)
-                batch_values.append((email, url, datetime.now(timezone.utc).astimezone(timezone(EST_OFFSET))))
-            args_str = ','.join(cur.mogrify('(%s, %s, %s)', row).decode('utf8') for row in batch_values)
-            cur.execute(insert_query % args_str)
+        EST_OFFSET = timedelta(hours=-5)
+        batch_values=[]
+        batch_values.append((EMAIL_URL_BATCHES, datetime.now(timezone.utc).astimezone(timezone(EST_OFFSET))))
+        args_str = ','.join(cur.mogrify('(%s, %s, %s)', row).decode('utf8') for row in batch_values)
+        cur.execute(insert_query % args_str)
+        
         # Commit the changes
         conn.commit()
 
