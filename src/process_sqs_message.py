@@ -28,5 +28,5 @@ def process_sqs_message():
 
             req_session.cookies.clear()
             cell.delete(QueueUrl=url, ReceiptHandle=cell.receipt_handle)
-            print("\n\n\t::::::: This SQS message is now deleted :::::::")
+            print("\n\n\t\t::::::: This SQS message is now deleted :::::::")
             time.sleep(10)

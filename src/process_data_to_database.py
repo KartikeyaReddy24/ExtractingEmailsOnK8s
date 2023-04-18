@@ -3,10 +3,12 @@ from search_and_extract_emails import *
 from import_utils import *
 from more_itertools import chunked
 from variables import *
+from psycopg2.extras import execute_values
 
-def process_data_to_database(email_ids, website_links):
 
-    # _,_,postgres_user_decoded, postgres_password_decoded = decode_kubernetes_secrets()
+def process_data_to_database(email_ids, website_link):
+
+    #_,_,postgres_user_decoded, postgres_password_decoded = decode_kubernetes_secrets()
 
     # Define the database connection parameters
     db_params = {
@@ -18,31 +20,36 @@ def process_data_to_database(email_ids, website_links):
 
     # Define the SQL query to insert the data
     insert_query = INSERT_QUERY
+
     # Define the list of email and url tuples to insert
-    email_urls = list(zip(email_ids,website_links))
+    email_urls=[]
+    for email in email_ids:
+       email_urls.append((email,website_link))
+    print("EMAIL URLS:", email_urls)
+
+
+    # Create a connection pool and get a connection from the pool
+    conn_pool = psycopg2.pool.SimpleConnectionPool(
+        1, 20, **db_params)
+    conn = conn_pool.getconn()
+
+    # Create a cursor object from the connection
+    cur = conn.cursor()
+
+    # Use batching to process data in smaller chunks
+    EMAIL_URL_BATCHES = chunked(email_urls, BATCH_SIZE_FOR_EMAILIDS)
     try:
-        # Create a connection pool and get a connection from the pool
-        conn_pool = psycopg2.pool.SimpleConnectionPool(
-            1, 20, **db_params)
-        conn = conn_pool.getconn()
-
-        # Create a cursor object from the connection
-        cur = conn.cursor()
-
-        # Use batching to process data in smaller chunks
-        batch_values=[]
-        EMAIL_URL_BATCHES= chunked(email_urls, BATCH_SIZE)
-        batch_values.append((EMAIL_URL_BATCHES, datetime.now(timezone.utc).astimezone(timezone(EST_OFFSET))))
-        args_str = ','.join(cur.mogrify('(%s, %s, %s)', row).decode('utf8') for row in batch_values)
-        cur.execute(insert_query % args_str)
+        for batch in EMAIL_URL_BATCHES:
+            batch_values = [(email,url, datetime.now(timezone.utc).astimezone(timezone(EST_OFFSET))) for email, url in batch]
+            execute_values(cur, insert_query, batch_values)
 
         # Commit the changes
         conn.commit()
-
-    except psycopg2.Error as e:
+        print("Data successfully inserted into database!")
+    except Exception as e:
         # Handle any exceptions that occurred during the execution of the above code
-        print(f"Error {e.pgcode}: {e.pgerror}")
-
+        print(f"Error: {e}")
+        conn.rollback()
     finally:
         # Close the cursor and connection
         cur.close()

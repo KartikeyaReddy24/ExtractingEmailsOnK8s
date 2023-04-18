@@ -37,5 +37,8 @@ INSERT_QUERY= (
 # Database Batch Size
 BATCH_SIZE = 4
 
+# Database - Batch Size for Emails IDS
+BATCH_SIZE_FOR_EMAILIDS = 4
+
 # Database Timezone
 EST_OFFSET = timedelta(hours=-5)
