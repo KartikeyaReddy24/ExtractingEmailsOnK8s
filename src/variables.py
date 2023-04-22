@@ -28,10 +28,10 @@ headers = {
 }
 
 # Database
-DB_HOST= "extracting-emails-database.cglvu9svk8cj.us-east-1.rds.amazonaws.com",
+DB_HOST= 'extracting-emails-database.cglvu9svk8cj.us-east-1.rds.amazonaws.com'
 DB_PORT= 5432
 INSERT_QUERY= (
-        "INSERT INTO batch_values (email, url, timestamp) VALUES %s ON CONFLICT DO NOTHING"
+        "INSERT INTO emails (email_address, source_url, created_at) VALUES %s ON CONFLICT DO NOTHING"
     )
 
 # Database Batch Size
