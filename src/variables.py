@@ -18,7 +18,7 @@ DELAY_TIME_AFTER_EVERY_SEARCH = 25
 MAX_WEBSEARCHES = 2
 
 # Wait TIme After Reaching Maximum Websearches
-WAIT_TIME_AFTER_REACHIGN_MAX_WEBSEARCHES = 180
+WAIT_TIME_AFTER_REACHIGN_MAX_WEBSEARCHES = 90
 
 # Extracting Emails
 EMAIL_REGEX = r"-*([\w\-\.]{1,100}@(?!example.com)(?!wixpress.com)(?!email.com)(?!sentry-viewer.wixpress.com)(?!2x.gif)(?!sentry.o2dev.net)(?!2x.png.com)(?!sentry.wixpress.com)(?!sentry-next.wixpress.com)(?!sentry.io)(?!16.14.0.com)(?!16.14.0)(?!ingest.sentry.io)(?!aphixsoftware.com)(?:\w[\w\-]+\.)+(?!jpg)(?!png)(?!js)(?!gif)[\w]+)-*"
