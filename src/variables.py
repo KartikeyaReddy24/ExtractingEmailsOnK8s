@@ -42,5 +42,3 @@ BATCH_SIZE_FOR_EMAILIDS = 4
 
 # Get the timezone object for Eastern Time Zone
 EASTERN_TIME_ZONE = pytz.timezone('US/Eastern')
-
-
