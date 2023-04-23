@@ -1,8 +1,7 @@
 import time
 import random
 import os
-from datetime import datetime
-import uuid
+from datetime import datetime, timezone, timedelta
 from typing import List, Tuple
 import boto3
 from googlesearch import search
@@ -13,4 +12,6 @@ from kubernetes import client, config
 import base64
 import psycopg2
 import psycopg2.pool
-from datetime import datetime, timezone, timedelta
+import pytz
+from more_itertools import chunked
+from psycopg2.extras import execute_values

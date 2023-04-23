@@ -40,5 +40,5 @@ BATCH_SIZE = 4
 # Database - Batch Size for Emails IDS
 BATCH_SIZE_FOR_EMAILIDS = 4
 
-# Database Timezone
-EST_OFFSET = timedelta(hours=-5)
+# Get the timezone object for Eastern Time Zone
+EASTERN_TIME_ZONE = pytz.timezone('US/Eastern')

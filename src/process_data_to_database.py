@@ -1,9 +1,7 @@
 from decode_k8s_secrets import decode_kubernetes_secrets
 from search_and_extract_emails import *
 from import_utils import *
-from more_itertools import chunked
 from variables import *
-from psycopg2.extras import execute_values
 
 
 def process_data_to_database(email_ids, website_link):
@@ -27,7 +25,6 @@ def process_data_to_database(email_ids, website_link):
        email_urls.append((email,website_link))
     print("EMAIL URLS:", email_urls)
 
-
     # Create a connection pool and get a connection from the pool
     conn_pool = psycopg2.pool.SimpleConnectionPool(
         1, 20, **db_params)
@@ -40,7 +37,7 @@ def process_data_to_database(email_ids, website_link):
     EMAIL_URL_BATCHES = chunked(email_urls, BATCH_SIZE_FOR_EMAILIDS)
     try:
         for batch in EMAIL_URL_BATCHES:
-            batch_values = [(email,url, datetime.now(timezone.utc).astimezone(timezone(EST_OFFSET))) for email, url in batch]
+            batch_values = [(email,url, datetime.now(timezone.utc).astimezone(EASTERN_TIME_ZONE)) for email, url in batch]
             execute_values(cur, insert_query, batch_values)
 
         # Commit the changes
