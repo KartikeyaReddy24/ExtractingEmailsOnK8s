@@ -1,5 +1,11 @@
 FROM ubuntu:latest
 
+RUN ln -fs /usr/share/zoneinfo/America/New_York /etc/localtime && \
+    DEBIAN_FRONTEND=noninteractive apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y tzdata && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN apt-get update && \
     apt-get install -y python3 git && \
     git clone https://github.com/KartikeyaReddy24/ExtractingEmailsOnK8s.git && \
@@ -16,7 +22,6 @@ RUN apt-get update && \
     apt-get purge -y python3-pip && \
     apt-get autoremove -y && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
-    ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
+    rm -rf /var/lib/apt/lists/*
 
 CMD ["python3", "/ExtractingEmailsOnK8s/src/main.py"]
