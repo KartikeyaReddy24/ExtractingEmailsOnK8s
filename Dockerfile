@@ -16,6 +16,7 @@ RUN apt-get update && \
     apt-get purge -y python3-pip && \
     apt-get autoremove -y && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    ln -sf /usr/share/zoneinfo/America/New_York /etc/localtime
 
 CMD ["python3", "/ExtractingEmailsOnK8s/src/main.py"]

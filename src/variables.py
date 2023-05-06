@@ -3,7 +3,7 @@ from import_utils import *
 
 # SQS URL and Queue Name
 SQS_URL = "https://sqs.us-east-1.amazonaws.com/492094906798/"
-SQS_QUEUE_NAME = "MyQueue"
+SQS_QUEUE_NAME = "IRLCompaniesProduction"
 
 # SQS Region Name
 REGION_NAME_SQS = "us-east-1"
