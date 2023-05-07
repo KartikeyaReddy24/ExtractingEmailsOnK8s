@@ -31,7 +31,7 @@ headers = {
 DB_HOST= 'extracting-emails-database.cglvu9svk8cj.us-east-1.rds.amazonaws.com'
 DB_PORT= 5432
 INSERT_QUERY= (
-        "INSERT INTO emails (email_address, source_url, created_at) VALUES (%s, %s, to_timestamp(%s, 'YYYY-MM-DD HH24:MI:SS.US') AT TIME ZONE 'US/Eastern') ON CONFLICT DO NOTHING;"
+        "INSERT INTO emails (email_address, source_url, created_at) VALUES (%s, %s, timezone('US/Eastern', now())) ON CONFLICT DO NOTHING"
     )
 
 # Database Batch Size
